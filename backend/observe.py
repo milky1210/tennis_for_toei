@@ -84,7 +84,7 @@ class Observer:
 
             
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"Failed")
             self.driver.quit()
             return
         print("Access successful!")
