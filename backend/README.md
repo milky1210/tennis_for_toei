@@ -1,12 +1,26 @@
-# tennis_for_sinjuku
-新宿区用のテニスコート監視・予約コード
+# tennis_for_toei
+都営コート用のテニスコート監視・予約コード
 ## 環境整備
 
-pipなどでパッケージを収集する。
+Dockerによる管理である
+```bash
+docker compose up -d --build
+```
+にてコンテナを起動する
 
-selenium, chrome-driver など
+### Docker環境の説明
+selenium自体のコンテナとpythonでスクレイピングするためのbackendコンテナ
 
-pythonやそのパッケージは利用者の環境次第なので、お好みの方法で必要なライブラリ、ドライバをインストールしてほしい。
+
+### 開発手法
+backendのコンテナ上でコード編集を行う。
+ブラウザの動作は下記の方法でGUIを可視化できる
+
+http://localhost:7900 をブラウザで開く
+
+パスワード：secret を入力
+
+実行中の自動操作をリアルタイムで確認
 
 ## ユーザー情報ファイルに情報書き入れ
 sample_pwd_id.jsonファイルに新宿区の団体IDとパスワードを入力し、ファイル名をpwd_id.jsonに変更することで利用できます。
