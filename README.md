@@ -26,14 +26,67 @@ http://localhost:7900 をブラウザで開く
 sample_pwd_id.jsonファイルに新宿区の団体IDとパスワードを入力し、ファイル名をpwd_id.jsonに変更することで利用できます。
 
 
-## twitterAPI
-必須ではないが結果を呟くためにtwitterAPIと連携している。
-利用する場合config.pyを追加し、必要なライセンス情報を足す必要あり。
-使わない場合はwithout_twitterのブランチへ
+## 定期実行
+### Linuxでの実行
+下記のようなbashスクリプトを作成し、crontabに追記
+```bash
+#!/bin/bash
 
-##ビルド方法
+# 作業ディレクトリに移動
+cd (プロジェクトフォルダへの絶対パス)
 
-python main.py --addSun --addSat --addNight
+# ログ出力先
+LOGFILE="./log/observe_$(date +'%Y%m%d_%H%M%S').log"
 
-にて監視用コードを動かし、平日19:00-と土日のコートが空いた時にとる。
-詳しくはpython main.py -hから
+# Docker起動
+docker compose up -d
+
+# Selenium が起動するまで待機
+for i in {1..30}; do
+    if curl -s http://localhost:4444/status | grep -q "ready"; then
+        echo "✅ Selenium is ready."
+        break
+    fi
+    echo "⌛ Waiting for Selenium... ($i)"
+    sleep 1
+done
+
+# メイン処理実行
+docker compose exec backend python observe.py >> "$LOGFILE" 2>&1
+
+# コンテナ停止（任意）
+docker compose down
+```
+### Windowsでの実行
+下記のようなexec.ps1ファイルを作成し、スケジューラーに登録
+```
+cd C:(プロジェクトフォルダへの絶対パス)
+
+# コンテナ起動
+docker compose up -d
+
+# Seleniumが立ち上がるまで待機（最大30秒）
+$timeout = 30
+$elapsed = 0
+$ready = $false
+
+while (-not $ready -and $elapsed -lt $timeout) {
+    try {
+        Invoke-WebRequest -Uri "http://localhost:4444/status" -UseBasicParsing | Out-Null
+        $ready = $true
+    } catch {
+        Start-Sleep -Seconds 1
+        $elapsed++
+    }
+}
+
+if ($ready) {
+    Write-Output "✅ Selenium is ready. Starting main script..."
+    docker compose exec backend python main.py >> log.log
+} else {
+    Write-Output "❌ Selenium did not start in time."
+}
+
+# 終了処理（任意）
+docker compose down
+```

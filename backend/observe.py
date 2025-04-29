@@ -11,24 +11,18 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.select import Select
 
 class Observer:
-    def __init__(self, visible=True):
+    def __init__(self):
         with open("pw_id.json", "r") as f:
             creds = json.load(f)
         self.ID = creds["ID"]
         self.PW = creds["PW"]
 
-        print(f"visible: {visible}")
         options = Options()
         options.binary_location = "/usr/bin/chromium"
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920x1080")
-
-        if not visible:
-            user_data_dir = f"/tmp/chrome-profile-{uuid.uuid4()}"
-            options.add_argument(f"--user-data-dir={user_data_dir}")
-            options.add_argument("--headless=new")
 
         self.driver = webdriver.Remote(
             command_executor=os.getenv("SELENIUM_URL", "http://selenium:4444/wd/hub"),
@@ -88,14 +82,14 @@ class Observer:
 
             
         except Exception as e:
-            print(f"⚠️ 操作失敗しました: {e}")
+            print(f"Error: {e}")
             self.driver.quit()
             return
-        print("✅ ページにアクセスしました。")
+        print("Access successful!")
 
         # 終了処理
         self.driver.quit()
 
 if __name__ == "__main__":
-    observer = Observer(visible=True)
+    observer = Observer()
     observer.observe(park_id = '1060', date = '20250531', hour = '10')

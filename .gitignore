@@ -5,3 +5,6 @@ config.py
 __pycache__
 
 *.csv
+*.ps1
+*.log
+yoyaku_list.txt
