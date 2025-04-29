@@ -79,6 +79,8 @@ class Observer:
             self.sclick('//*[@id="btn-go"]')
             # ポップアップに対してOKをクリック
             self.driver.switch_to.alert.accept()
+            # 反映を完了させるためにしばらく待つ
+            time.sleep(10)
 
             
         except Exception as e:
