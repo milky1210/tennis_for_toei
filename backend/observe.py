@@ -48,7 +48,7 @@ class Observer:
         for xpath in xpaths:
             self.sclick(xpath, shift)
         
-    def observe(self, park_id = '1060', date_time='20250529'):
+    def observe(self, park_id = '1060', date='20250529', hour = '10'):
 
         # ページアクセス
         self.driver.get("https://kouen.sports.metro.tokyo.lg.jp/web/index.jsp")
@@ -63,7 +63,7 @@ class Observer:
             ## ログインボタンを押す
             self.sclick('//*[@id="btn-go"]')
             ## 日付を選択
-            self.driver.find_element(By.XPATH, '//*[@id="daystart-home"]').send_keys(date_time[4:] + date_time[:4])
+            self.driver.find_element(By.XPATH, '//*[@id="daystart-home"]').send_keys(date[4:] + date[:4])
             ## 種目を選択
             sports_dropdown = Select(self.driver.find_element(By.XPATH, '//*[@id="purpose-home"]'))
             sports_dropdown.select_by_value('1000_1030')
@@ -76,7 +76,7 @@ class Observer:
             self.sclick('//*[@id="btn-go"]')
             time.sleep(15)
             # 時間を選択
-            self.sclick(f'//*[@id="{date_time}_10"]/div')
+            self.sclick(f'//*[@id="{date}_{hour}"]/div')
             # 予約ボタンをクリック
             self.sclick('//*[@id="btn-go"]')
             time.sleep(1)
@@ -91,12 +91,11 @@ class Observer:
             print(f"⚠️ 操作失敗しました: {e}")
             self.driver.quit()
             return
-        print("✅ ページにアクセスしました。手動操作が可能です。")
-        input("⚡ 確認が完了したらEnterを押してください...\n")
+        print("✅ ページにアクセスしました。")
 
         # 終了処理
         self.driver.quit()
 
 if __name__ == "__main__":
     observer = Observer(visible=True)
-    observer.observe(park_id = '1060', date_time = '20250529')
+    observer.observe(park_id = '1060', date = '20250531', hour = '10')
