@@ -58,6 +58,7 @@ class Observer:
             self.sclick('//*[@id="btn-go"]')
             ## 日付を選択
             self.driver.find_element(By.XPATH, '//*[@id="daystart-home"]').send_keys(date[4:] + date[:4])
+            print("login success!")
             ## 種目を選択
             sports_dropdown = Select(self.driver.find_element(By.XPATH, '//*[@id="purpose-home"]'))
             sports_dropdown.select_by_value('1000_1030')
