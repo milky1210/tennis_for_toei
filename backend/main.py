@@ -15,6 +15,7 @@ def main():
         park_id, date, hour = line.strip().split(",")
         observer = Observer()
         observer.observe(park_id=park_id.strip(), date = date.strip(), hour = hour.strip())
+    dt = datetime.datetime.now(JST)
     print("All done at: ", dt.strftime("%Y-%m-%d %H:%M:%S"))
 
 if __name__ == "__main__":
