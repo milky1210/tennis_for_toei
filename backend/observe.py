@@ -56,6 +56,7 @@ class Observer:
             self.driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(self.PW)
             ## ログインボタンを押す
             self.sclick('//*[@id="btn-go"]')
+            time.sleep(2)
             ## 日付を選択
             self.driver.find_element(By.XPATH, '//*[@id="daystart-home"]').send_keys(date[4:] + date[:4])
             print("login success!")
